@@ -18,11 +18,14 @@ import java.util.Date;
 
 @Slf4j
 public class JsonSchemaValidator {
+    public static ObjectMapper objectMapper;
 
+    static {
+        JsonSchemaValidator.objectMapper = new ObjectMapper();
+        objectMapper.setDateFormat(new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX"));
+    }
 
     public static void validateTransaction(TransactionDto transaction, Path schemaPath) throws Exception {
-        ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.setDateFormat(new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX"));
         JsonNode jsonNode = objectMapper.valueToTree(transaction);
 
         try (InputStream schemaStream = inputStreamFromClasspath(schemaPath.toString())) {
@@ -40,12 +43,12 @@ public class JsonSchemaValidator {
         return Thread.currentThread().getContextClassLoader().getResourceAsStream(path);
     }
 
-    public static void main(String[] args) throws Exception {
-        validateTransaction(new TransactionDto()
-                .setTransactionId("111")
-                .setAmount(555L)
-                .setOperationType(OperationType.DEPOSIT)
-                .setDate(new Date()),
-                Path.of("schema.json"));
-    }
+//    public static void main(String[] args) throws Exception {
+//        validateTransaction(new TransactionDto()
+//                .setTransactionId("111")
+//                .setAmount(555L)
+//                .setOperationType(OperationType.DEPOSIT)
+//                .setDate(new Date()),
+//                Path.of("schema.json"));
+//    }
 }
