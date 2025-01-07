@@ -1,7 +1,6 @@
 package sbp.service;
 
 import lombok.extern.slf4j.Slf4j;
-import org.apache.kafka.clients.consumer.Consumer;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
@@ -28,7 +27,7 @@ import static sbp.constants.Constants.PRODUCER_ID_HEADER_KEY;
 
 @Slf4j
 public class ConsumerService extends Thread implements AutoCloseable {
-    private Consumer<String, TransactionDto> consumer;
+    private final KafkaConsumer<String, TransactionDto> consumer;
 
     private static final int MESSAGE_COMMIT_THRESHOLD = 150;
 
@@ -38,22 +37,17 @@ public class ConsumerService extends Thread implements AutoCloseable {
     private final TransactionStorage storage;
 
     public ConsumerService(Properties consumerProperties, TransactionStorage storage) {
+        this.consumer = new KafkaConsumer<>(consumerProperties);
+        this.storage = storage;
+
         Properties transactionProperties = TransactionPropertiesLoader.getTopicProperties();
         this.topicName = transactionProperties.getProperty("transaction.topic.name");
-
-        this.consumer = new KafkaConsumer<>(consumerProperties);
-        consumer.subscribe(List.of(topicName));
-        consumer.assignment().forEach(partition -> accept(partition, consumer));
-
-        this.storage = storage;
-    }
-
-    public void setKafkaConsumer(Consumer<String, TransactionDto> consumer) {
-        this.consumer = consumer;
     }
 
     public void consume() {
         AtomicInteger messageCounter = new AtomicInteger(0);
+        consumer.subscribe(List.of(topicName));
+        consumer.assignment().forEach(partition -> accept(partition, consumer));
 
         try {
             while (true) {
@@ -71,9 +65,11 @@ public class ConsumerService extends Thread implements AutoCloseable {
                     messageCounter.incrementAndGet();
                 }
             }
-        } catch (WakeupException e) {
-            // Игнорируем для корректного завершения
-        } catch (Exception e) {
+        }
+        catch (WakeupException e) {
+            //  poll прерван с помощью wakeup, игнорируем для корректного завершения
+        }
+        catch (Exception e) {
             log.info("Unexpected error", e);
         } finally {
             try {
@@ -84,14 +80,14 @@ public class ConsumerService extends Thread implements AutoCloseable {
         }
     }
 
-    private void accept(TopicPartition partition, Consumer<String, TransactionDto> consumer) {
+    private void accept(TopicPartition partition, KafkaConsumer<String, TransactionDto> consumer) {
         var offsetAndMetadata = currentOffsets.get(partition);
         if (nonNull(offsetAndMetadata)) {
             consumer.seek(partition, offsetAndMetadata);
         }
     }
 
-    private void commitAsyncOnceAThreshold(AtomicInteger messageCounter, Consumer<String, TransactionDto> consumer) {
+    private void commitAsyncOnceAThreshold(AtomicInteger messageCounter, KafkaConsumer<String, TransactionDto> consumer) {
         if (isThresholdPassed(messageCounter)) {
             consumer.commitAsync(currentOffsets, (offsets, exception) -> {
                 if (Objects.nonNull(exception)) {
