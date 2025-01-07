@@ -3,6 +3,7 @@ package sbp.school.kafka.service;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import sbp.school.kafka.config.KafkaConfig;
+import sbp.school.kafka.dto.TransactionDto;
 
 import java.util.Properties;
 
