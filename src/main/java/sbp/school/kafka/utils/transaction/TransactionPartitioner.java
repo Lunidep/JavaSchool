@@ -1,4 +1,4 @@
-package sbp.school.kafka.utils;
+package sbp.school.kafka.utils.transaction;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.producer.Partitioner;
@@ -29,7 +29,7 @@ public class TransactionPartitioner implements Partitioner {
 
     private void validateKey(Object key, byte[] keyBytes) {
         if (keyBytes == null || !(key instanceof String)) {
-            String errorMessage = "Ошибка: ключ должен быть строкой (String). Убедитесь, что переданный ключ соответствует ожидаемому типу.";
+            String errorMessage = "Ошибка: ключ должен быть строкой. Убедитесь, что переданный ключ соответствует ожидаемому типу.";
             log.error(errorMessage);
             throw new IllegalArgumentException(errorMessage);
         }

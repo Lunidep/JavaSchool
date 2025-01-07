@@ -8,13 +8,11 @@ import org.everit.json.schema.Schema;
 import org.everit.json.schema.loader.SchemaLoader;
 import org.json.JSONObject;
 import org.json.JSONTokener;
-import sbp.school.kafka.dto.OperationType;
 import sbp.school.kafka.dto.TransactionDto;
 
 import java.io.InputStream;
 import java.nio.file.Path;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 
 @Slf4j
 public class JsonSchemaValidator {
@@ -42,13 +40,4 @@ public class JsonSchemaValidator {
     private static InputStream inputStreamFromClasspath(String path) {
         return Thread.currentThread().getContextClassLoader().getResourceAsStream(path);
     }
-
-//    public static void main(String[] args) throws Exception {
-//        validateTransaction(new TransactionDto()
-//                .setTransactionId("111")
-//                .setAmount(555L)
-//                .setOperationType(OperationType.DEPOSIT)
-//                .setDate(new Date()),
-//                Path.of("schema.json"));
-//    }
 }
