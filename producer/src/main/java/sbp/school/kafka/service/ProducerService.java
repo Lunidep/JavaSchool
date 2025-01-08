@@ -25,6 +25,7 @@ public class ProducerService {
         try {
             producer.send(new ProducerRecord<>(topic, transaction.getOperationType().name(), transaction),
                     ProducerService::onCompletion);
+            producer.flush();
         } catch (Throwable ex) {
             log.error("Не удалось отправить транзакцию {} в топик {}. Причина: {}", transaction, topic, ex.getMessage());
             producer.flush();
