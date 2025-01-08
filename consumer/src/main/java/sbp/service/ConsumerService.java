@@ -10,22 +10,16 @@ import java.util.Properties;
 
 @Slf4j
 public class ConsumerService {
-    private final Properties kafkaProperties;
-
-    public ConsumerService(Properties kafkaProperties) {
-        this.kafkaProperties = kafkaProperties;
-    }
-
-    public void read() {
-        try(KafkaConsumer<String, String> consumer = new KafkaConsumer<>(kafkaProperties)) {
+    public void read(Properties properties) {
+        try(KafkaConsumer<String, String> consumer = new KafkaConsumer<>(properties)) {
             consumer.subscribe(List.of("transactions-topic"));
 
             while (true) {
                 ConsumerRecords<String, String> records = consumer.poll(100);
 
                 for (ConsumerRecord<String, String> record : records) {
-                    log.info(String.format("topic: %s, partition: %d, key: %s, value: %s, offset: %d",
-                            record.topic(), record.partition(), record.key(), record.value(), record.offset()));
+                    log.info(String.format("consumer: %s, topic: %s, partition: %d, key: %s, value: %s, offset: %d",
+                            properties.get("group.id"), record.topic(), record.partition(), record.key(), record.value(), record.offset()));
                 }
             }
         }
