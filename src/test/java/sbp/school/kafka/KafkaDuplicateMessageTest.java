@@ -56,7 +56,6 @@ public class KafkaDuplicateMessageTest {
         long durationInMillis = (endTime - startTime) / 1_000_000; // переводим в миллисекунды
         System.out.println("Время от создания консьюмера до удаления: " + durationInMillis + " миллисекунд\n" +
                 "Время на которое настроен автокоммит: 1000000000 миллисекунд");
-        // durationInMillis обычно =
 
         // создаю consumer2  той же консьюмер-группе, по идее первый консьюмер не мог успеть автозакоммитить то что он считал
         KafkaConsumer<String, String> consumer2 = consumerGetMessage("CONSUMER 2 ", count);
