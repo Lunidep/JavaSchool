@@ -12,7 +12,7 @@ public class TopicPropertiesLoader {
 
     public static Properties getTopicProperties() {
         Properties appProps = new Properties();
-        try (FileInputStream input = new FileInputStream(Constants.PATH_TO_CONSUMER_PROPS)) {
+        try (FileInputStream input = new FileInputStream(Constants.PATH_TO_TOPIC_PROPS)) {
             appProps.load(input);
         } catch (IOException e) {
             log.error("Ошибка при загрузке свойств topic: {}", e.getMessage());
