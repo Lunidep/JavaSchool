@@ -1,18 +1,21 @@
 package sbp.school.kafka;
 
 import org.junit.jupiter.api.Test;
-import sbp.school.kafka.dto.OperationType;
-import sbp.school.kafka.dto.TransactionDto;
+import sbp.dto.OperationType;
+import sbp.dto.TransactionDto;
+import sbp.config.KafkaProducerPropertiesLoader;
 import sbp.school.kafka.service.ProducerService;
 
 import java.util.Date;
+import java.util.Properties;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatNoException;
 
-class MainTest {
+class ProducerTest {
     @Test
     void testSendShouldDontThrowException() {
-        ProducerService producerService = new ProducerService();
+        Properties producerProperties = KafkaProducerPropertiesLoader.getKafkaProducerProperties();
+        ProducerService producerService = new ProducerService(producerProperties);
         TransactionDto transaction = new TransactionDto()
                 .setTransactionId("111")
                 .setAmount(555L)

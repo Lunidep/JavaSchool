@@ -1,10 +1,9 @@
 package sbp.school.kafka.utils.transaction;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.common.serialization.Serializer;
-import sbp.school.kafka.dto.TransactionDto;
-import sbp.school.kafka.utils.JsonSchemaValidator;
+import sbp.dto.TransactionDto;
+import sbp.utils.JsonSchemaValidator;
 
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
@@ -25,8 +24,6 @@ public class TransactionSerializer implements Serializer<TransactionDto> {
 
             String value = JsonSchemaValidator.objectMapper.writeValueAsString(transactionDto);
             return value.getBytes(StandardCharsets.UTF_8);
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

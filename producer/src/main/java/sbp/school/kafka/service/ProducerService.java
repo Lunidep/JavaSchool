@@ -4,20 +4,19 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.kafka.clients.producer.RecordMetadata;
-import sbp.school.kafka.config.KafkaProducerPropertiesLoader;
-import sbp.school.kafka.config.TopicPropertiesLoader;
-import sbp.school.kafka.constants.Constants;
-import sbp.school.kafka.dto.TransactionDto;
+import sbp.dto.TransactionDto;
+import sbp.config.TopicPropertiesLoader;
+
+import java.util.Properties;
 
 @Slf4j
 public class ProducerService {
 
     private final KafkaProducer<String, TransactionDto> producer;
-    private final String topic;
+    private final String topic = TopicPropertiesLoader.getTopicProperties().getProperty("transaction.topic");
 
-    public ProducerService() {
-        this.producer = new KafkaProducer<>(KafkaProducerPropertiesLoader.getKafkaProducerProperties());
-        this.topic = TopicPropertiesLoader.getTopicProperties().getProperty(Constants.TOPIC_NAME);
+    public ProducerService(Properties producerProperties) {
+        this.producer = new KafkaProducer<>(producerProperties);
     }
 
     public void send(TransactionDto transaction) {

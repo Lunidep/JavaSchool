@@ -4,7 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.producer.Partitioner;
 import org.apache.kafka.common.Cluster;
 import org.apache.kafka.common.PartitionInfo;
-import sbp.school.kafka.dto.OperationType;
+import sbp.dto.OperationType;
 
 import java.util.Arrays;
 import java.util.List;

@@ -1,8 +1,9 @@
 package sbp.school.kafka.utils;
 
 import org.junit.jupiter.api.Test;
-import sbp.school.kafka.dto.OperationType;
-import sbp.school.kafka.dto.TransactionDto;
+import sbp.dto.OperationType;
+import sbp.dto.TransactionDto;
+import sbp.utils.JsonSchemaValidator;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;

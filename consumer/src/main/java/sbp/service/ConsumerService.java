@@ -13,16 +13,20 @@ import java.time.Duration;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import static java.util.Objects.nonNull;
+
 @Slf4j
 public class ConsumerService {
     private static final int MESSAGE_COMMIT_THRESHOLD = 150;
     private final Map<TopicPartition, OffsetAndMetadata> currentOffsets = new HashMap<>();
-    private final String topicName = TopicPropertiesLoader.getTopicProperties().getProperty(Constants.TOPIC_NAME);
+    private final String topicName = TopicPropertiesLoader.getTopicProperties().getProperty("transaction.topic");
 
     public void read(Properties properties) {
         AtomicInteger messageCounter = new AtomicInteger(0);
         try(KafkaConsumer<String, TransactionDto> consumer = new KafkaConsumer<>(properties)) {
             consumer.subscribe(List.of(topicName));
+            consumer.assignment().forEach(partition -> accept(partition, consumer));
+
 
             try {
                 while (true) {
@@ -52,6 +56,13 @@ public class ConsumerService {
                     consumer.close();
                 }
             }
+        }
+    }
+
+    private void accept(TopicPartition partition, KafkaConsumer<String, TransactionDto> consumer) {
+        var offsetAndMetadata = currentOffsets.get(partition);
+        if (nonNull(offsetAndMetadata)) {
+            consumer.seek(partition, offsetAndMetadata);
         }
     }
 
