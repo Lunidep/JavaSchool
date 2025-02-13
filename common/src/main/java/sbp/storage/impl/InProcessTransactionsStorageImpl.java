@@ -5,16 +5,9 @@ import sbp.dto.TransactionDto;
 import sbp.storage.InProcessTransactionsStorage;
 import sbp.storage.Storage;
 
-import java.util.Map;
-
 @RequiredArgsConstructor
 public class InProcessTransactionsStorageImpl implements InProcessTransactionsStorage {
     private final Storage storage;
-
-    @Override
-    public Map<String, TransactionDto> getTransactionsSendInProgress() {
-        return storage.getTransactionsSendInProgress();
-    }
 
     @Override
     public boolean isTransactionsSendInProgressEmpty() {

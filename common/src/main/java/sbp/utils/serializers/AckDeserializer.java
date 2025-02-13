@@ -1,20 +1,19 @@
-package sbp.utils.transaction;
+package sbp.utils.serializers;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.common.serialization.Deserializer;
-import sbp.dto.TransactionDto;
+import sbp.dto.AckDto;
 
 import java.nio.charset.StandardCharsets;
 
-@Slf4j
-public class TransactionDeserializer implements Deserializer<TransactionDto> {
+import static sbp.utils.JsonSchemaValidator.objectMapper;
 
-    private final ObjectMapper objectMapper = new ObjectMapper();
+@Slf4j
+public class AckDeserializer implements Deserializer<AckDto> {
 
     @Override
-    public TransactionDto deserialize(String topic, byte[] data) {
+    public AckDto deserialize(String topic, byte[] data) {
         if (data == null) {
             String errorMessage = "Data cannot be null when deserializing from " + topic;
             log.error(errorMessage);
@@ -23,7 +22,7 @@ public class TransactionDeserializer implements Deserializer<TransactionDto> {
 
         try {
             String value = new String(data, StandardCharsets.UTF_8);
-            return objectMapper.readValue(value, TransactionDto.class);
+            return objectMapper.readValue(value, AckDto.class);
         } catch (JsonProcessingException e) {
             String errorMessage = "Error deserializing data from topic: " + topic;
             log.error(errorMessage, e);

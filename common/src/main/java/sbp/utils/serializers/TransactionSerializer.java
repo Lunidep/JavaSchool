@@ -1,4 +1,4 @@
-package sbp.school.kafka.utils.transaction;
+package sbp.utils.serializers;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.common.serialization.Serializer;

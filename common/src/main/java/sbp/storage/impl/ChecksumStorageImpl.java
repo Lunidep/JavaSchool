@@ -5,19 +5,13 @@ import sbp.dto.TransactionDto;
 import sbp.storage.ChecksumStorage;
 import sbp.storage.Storage;
 
-import java.util.Map;
 import java.util.stream.Collectors;
 
-import static sbp.utils.ChecksumHelper.calculateChecksum;
+import static sbp.utils.ChecksumCalculator.calculateChecksum;
 
 @RequiredArgsConstructor
 public class ChecksumStorageImpl implements ChecksumStorage {
     private final Storage storage;
-
-    @Override
-    public Map<Long, String> getSentChecksumMap() {
-        return storage.getSentChecksumMap();
-    }
 
     @Override
     public String getSentCheckSum(long intervalKey) {

@@ -7,7 +7,6 @@ import java.util.Map;
 import java.util.Set;
 
 public interface SentTransactionsStorage {
-    Map<Long, List<TransactionDto>> getSentTransactions();
     List<TransactionDto> getSentTransactions(long intervalKey);
     boolean isSentTransactionsEmpty();
     Set<Long> getSentTransactionIntervalKeys();

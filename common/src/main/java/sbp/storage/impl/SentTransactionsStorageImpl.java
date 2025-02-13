@@ -7,17 +7,11 @@ import sbp.storage.Storage;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 @RequiredArgsConstructor
 public class SentTransactionsStorageImpl implements SentTransactionsStorage {
     private final Storage storage;
-
-    @Override
-    public Map<Long, List<TransactionDto>> getSentTransactions() {
-        return storage.getSentTransactions();
-    }
 
     @Override
     public List<TransactionDto> getSentTransactions(long intervalKey) {
@@ -37,7 +31,6 @@ public class SentTransactionsStorageImpl implements SentTransactionsStorage {
     @Override
     public void putSentTransaction(long intervalKey, TransactionDto transaction) {
         storage.getSentTransactions().computeIfAbsent(intervalKey, k -> new ArrayList<>()).add(transaction);
-
     }
 
     @Override

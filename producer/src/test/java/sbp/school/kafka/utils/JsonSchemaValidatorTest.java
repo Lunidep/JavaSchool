@@ -7,9 +7,10 @@ import sbp.utils.JsonSchemaValidator;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Date;
+import java.time.LocalDateTime;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class JsonSchemaValidatorTest {
     private final Path schemaPath = Paths.get("json-schemas/schema.json");
@@ -20,7 +21,7 @@ class JsonSchemaValidatorTest {
                 .setTransactionId("111")
                 .setAmount(555L)
                 .setOperationType(OperationType.DEPOSIT)
-                .setDate(new Date());
+                .setDate(LocalDateTime.now());
 
         assertDoesNotThrow(() -> JsonSchemaValidator.validateTransaction(validTransaction, schemaPath));
     }
@@ -31,7 +32,7 @@ class JsonSchemaValidatorTest {
                 .setTransactionId("111")
                 .setAmount(555L)
                 .setOperationType(null)
-                .setDate(new Date());
+                .setDate(LocalDateTime.now());
 
         assertThrows(Exception.class, () ->
                 JsonSchemaValidator.validateTransaction(invalidTransaction, schemaPath)
