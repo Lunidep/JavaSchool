@@ -7,14 +7,14 @@ import java.io.IOException;
 import java.util.Properties;
 
 @Slf4j
-public class KafkaProducerPropertiesLoader {
+public class TopicPropertiesLoader {
 
-    public static Properties getKafkaProducerProperties() {
+    public static Properties getTopicProperties() {
         Properties appProps = new Properties();
-        try (FileInputStream input = new FileInputStream("src/main/resources/kafka-producer.properties")) {
+        try (FileInputStream input = new FileInputStream("producer/src/main/resources/topic.properties")) {
             appProps.load(input);
         } catch (IOException e) {
-            log.error("Ошибка при загрузке свойств Kafka: {}", e.getMessage());
+            log.error("Ошибка при загрузке свойств topic: {}", e.getMessage());
         }
 
         return appProps;
