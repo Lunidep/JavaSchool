@@ -1,17 +1,16 @@
-package sbp.utils.transaction;
+package sbp.utils.serializers;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.common.serialization.Deserializer;
 import sbp.dto.TransactionDto;
 
 import java.nio.charset.StandardCharsets;
 
+import static sbp.utils.JsonSchemaValidator.objectMapper;
+
 @Slf4j
 public class TransactionDeserializer implements Deserializer<TransactionDto> {
-
-    private final ObjectMapper objectMapper = new ObjectMapper();
 
     @Override
     public TransactionDto deserialize(String topic, byte[] data) {

@@ -3,7 +3,7 @@ package sbp.service;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.consumer.*;
 import org.apache.kafka.common.TopicPartition;
-import sbp.config.TopicPropertiesLoader;
+import sbp.config.TransactionPropertiesLoader;
 import sbp.constants.Constants;
 import sbp.dto.TransactionDto;
 import sbp.utils.JsonSchemaValidator;
@@ -19,7 +19,7 @@ import static java.util.Objects.nonNull;
 public class ConsumerService {
     private static final int MESSAGE_COMMIT_THRESHOLD = 150;
     private final Map<TopicPartition, OffsetAndMetadata> currentOffsets = new HashMap<>();
-    private final String topicName = TopicPropertiesLoader.getTopicProperties().getProperty("transaction.topic");
+    private final String topicName = TransactionPropertiesLoader.getTopicProperties().getProperty("transaction.topic.name");
 
     public void read(Properties properties) {
         AtomicInteger messageCounter = new AtomicInteger(0);
