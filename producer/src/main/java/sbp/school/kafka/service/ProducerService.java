@@ -3,6 +3,7 @@ package sbp.school.kafka.service;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.producer.KafkaProducer;
+import org.apache.kafka.clients.producer.Producer;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.kafka.clients.producer.RecordMetadata;
 import sbp.config.TransactionPropertiesLoader;
@@ -31,7 +32,7 @@ import static sbp.utils.IntervalCalculator.getIntervalKey;
 
 @Slf4j
 public class ProducerService extends Thread implements AutoCloseable {
-    private final KafkaProducer<String, TransactionDto> producer;
+    private Producer<String, TransactionDto> producer;
 
     private final ChecksumStorage checksumStorage;
     private final InProcessTransactionsStorage inProcessTransactionsStorage;
@@ -61,6 +62,10 @@ public class ProducerService extends Thread implements AutoCloseable {
         inProcessTransactionsStorage = new InProcessTransactionsStorageImpl(storage);
         retryCountStorage = new RetryCountStorageImpl(storage);
         sentTransactionsStorage = new SentTransactionsStorageImpl(storage);
+    }
+
+    public void setKafkaProducer(Producer<String, TransactionDto> producer) {
+        this.producer = producer;
     }
 
     @Override
